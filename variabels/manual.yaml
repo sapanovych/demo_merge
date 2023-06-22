@@ -1,0 +1,119 @@
+---
+# :::::::::::::::::::::::::::::::::
+# Compute
+# :::::::::::::::::::::::::::::::::
+kubernetes_version: "1.25.5"
+oidc_enabled: true
+admin_group_ids: 
+  - "4cb64c44-f5fe-4de7-a061-92461a9be20e"
+
+node_pools : 
+  main: 
+    orchestrator_version  : "1.25.5"
+    enabled               : true
+    enable_node_public_ip : false
+    vm_size               : "Standard_DS4_v2"
+    os_disk_size_gb       : 64
+    init_count            : 1
+    min_count             : 1
+    max_count             : 5
+    max_pods              : 128
+    mode                  : "User"
+    zones                 : 
+      - "1" 
+      - "2" 
+      - "3"
+    priority              : "Regular"
+    enable_auto_scaling   : true
+  
+
+
+default_node_pool : 
+  orchestrator_version : "1.25.5"
+  vm_size              : "Standard_D2_v2"
+  enable_auto_scaling  : true
+  min_count            : 1
+  max_count            : 3
+
+
+# :::::::::::::::::::::::::::::::::
+# Middleware
+# :::::::::::::::::::::::::::::::::
+key_vaults : 
+  common : 
+    enable_rbac_authorization  : true
+    soft_delete_retention_days : "7"
+    purge_protection_enabled   : "false"
+    sku_name                   : "standard"
+  
+
+
+mysql : 
+  main : 
+    create_mode           : "Default"
+    administrator_login   : "god"
+    charset               : "utf8"
+    collation             : "utf8_unicode_ci"
+    sku_name              : "B_Standard_B1s"
+    zone                  : 1
+    version               : "5.7"
+    backup_retention_days : 7
+
+    storage : 
+      iops              : 360
+      size_gb           : 20
+      auto_grow_enabled : false
+    
+
+    server_firewall_rule : 
+      name             : "allow-all"
+      start_ip_address : "0.0.0.0"
+      end_ip_address   : "255.255.255.255"
+    
+  
+
+
+cosmosdb : 
+  main : 
+    offer_type                    : "Standard"
+    public_network_access_enabled : true
+    kind                          : "MongoDB"
+    capabilities                  : 
+      - "EnableMongo"
+    mongo_server_version          : "3.6"
+
+    consistency_policy : 
+      consistency_level       : "Session"
+      max_interval_in_seconds : 301
+      max_staleness_prefix    : 100001
+    
+
+    geo_location : 
+      failover_priority : 0
+    
+  
+
+
+# :::::::::::::::::::::::::::::::::
+# Monitoring Stack
+# :::::::::::::::::::::::::::::::::
+thanos_storage_container : "thanos-storage"
+loki_storage_container   : "loki-storage"
+
+# :::::::::::::::::::::::::::::::::
+# DNS Settings
+# :::::::::::::::::::::::::::::::::
+private_dns_zone : "dev.camp.gd.xyz"
+public_dns_zone  : "dev.azure.rnd-devops.tech"
+
+onboarding_argocd_default_chart : 
+  path : "workloads"
+  revision : "main"
+  url : "https://github.com/griddynamics/cmp-argocd"
+  values : 
+    workloadsDefaultChart : 
+      path : "universal-app"
+      revision : "main"
+      url : "https://github.com/griddynamics/cmp-argocd"
+    
+  
