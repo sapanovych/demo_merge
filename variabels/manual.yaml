@@ -1,4 +1,20 @@
 ---
+manual_key_vault_name: "kvgdd01"
+subscription_id: "cc01e2dd-98ee18490"
+
+common_backend_config: 
+  resource_group_name: "rg-gds-01"
+  storage_account_name: "stgddmanualeastus01"
+  container_name: "tfstate"
+
+environment:
+  name: "nondev"
+  location:    "stus"
+  company:     "gd"
+  unit:        "vops"
+  name_suffix: "01"
+
+
 # :::::::::::::::::::::::::::::::::
 # Compute
 # :::::::::::::::::::::::::::::::::

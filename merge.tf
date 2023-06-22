@@ -7,10 +7,11 @@ locals {
     manual = fileexists(local.manual_path) ? file(local.manual_path) : yamlencode({})
     automated_only = fileexists(local.automated_only_path) ? file(local.automated_only_path) : yamlencode({})
 
-    settings = merge(
-        yamldecode(local.automated_only),
+    settings = merge(        
+        yamldecode(local.automated),
         yamldecode(local.manual),
-        yamldecode(local.automated)
+        yamldecode(local.automated_only)
+
     )
 }
 
